@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "font-awesome/css/font-awesome.css";
+// import { io } from "socket.io-client";
+import React, { useState } from "react";
+import NewUser from "./components/NewUser";
 
 function App() {
+  const [newUser, setNewUser] = useState("");
+  const [user, setUser] = useState("");
+  function handleChange({ currentTarget: input }) {
+    setNewUser(input.value)
+  }
+  function logNewUser() {
+    setUser(newUser)
+  }
+  //username 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main className="content">
+      <div className="container mt-3">
+        {user && <div>Logged in as {user}</div>}
+        {!user && (
+          <NewUser newUser={newUser} handleChange={handleChange} logNewUser={logNewUser} />
+        )}
+      </div>
+    </main>
   );
 }
 
