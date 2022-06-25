@@ -3,6 +3,7 @@ import ChatContainer from "./ChatContainer";
 import ChatHeader from "./ChatHeader";
 import ChatInput from "./Chatinput";
 // import ScrollableFeed from 'react-scrollable-feed';
+// import ScrollableFeed from './cdn.html'
 
 const Chat = ({user,message,messages,setMessage,sendMessage})=>{
     return (
@@ -17,8 +18,8 @@ const Chat = ({user,message,messages,setMessage,sendMessage})=>{
                         <div key={index} className="text-center">
                             <span className="badge bg-info">
                                 {message.userId === user.userId
-                                 ? "You have Joined!" 
-                                 : `${message.username} has Joined!`} 
+                                 ? "您已加入此聊天室" 
+                                 : `${message.username} 已加入聊天室囉!`} 
                             </span>
                         </div>
                         ):(
@@ -64,5 +65,7 @@ const Chat = ({user,message,messages,setMessage,sendMessage})=>{
         </ChatContainer>   
     );
 };
+
+  <script src="https://cdn.jsdelivr.net/npm/react-scrollable-feed@1.3.1/dist/index.js" integrity="sha256-16tOO76JK+hKgV95c7AWSGxscWMF3fv+8Rru93tC2xQ=" crossorigin="anonymous"></script>
 
 export default Chat

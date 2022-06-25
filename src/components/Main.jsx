@@ -51,6 +51,7 @@ const Main = ({socket})=>{
         username:user.username,
         message,
       }
+      // 設定對話訊息
       setMessages([...messages,newMessage]);
       setMessage("");
     }
@@ -68,7 +69,4 @@ const Main = ({socket})=>{
     </main>
     )
 }
-<script>
-  <script src="https://cdn.jsdelivr.net/npm/react-scrollable-feed@1.3.1/dist/index.js" integrity="sha256-16tOO76JK+hKgV95c7AWSGxscWMF3fv+8Rru93tC2xQ=" crossorigin="anonymous"></script>
-</script>
 export default Main
