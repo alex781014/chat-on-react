@@ -1,6 +1,6 @@
 import React from "react";
 
-const NewUser = ({newUser,handleChange,logNewUser})=>{
+const Login = ({newUser,setNewUser,logNewUser})=>{
     return( 
         <div className="card w-100 text-center border-white">
             <div className="row">
@@ -14,7 +14,7 @@ const NewUser = ({newUser,handleChange,logNewUser})=>{
                     className="form-control mb-3"
                     placeholder="Username"
                     autoComplete="off"
-                    onChange={(e) => handleChange(e)}
+                    onChange={({currentTarget:input}) => setNewUser(input.value)}
                     onKeyPress={(e) => (e.code === "Enter" || e.code === 108? logNewUser() : null)}
                   />
                   <button className="btn btn-success w-100" onClick={() => logNewUser()}>Join!</button>
@@ -25,4 +25,4 @@ const NewUser = ({newUser,handleChange,logNewUser})=>{
     );
 }
 
-export default NewUser
+export default Login
