@@ -11,7 +11,7 @@ const ChatInput = ({message,setMessage,sendMessage}) =>{
                 placeholder="Type your message..." 
                 onChange={({currentTarget:input})=>setMessage(input.value)} 
                 onKeyPress={(e)=> (e.code === "Enter" ? sendMessage():null)}/>
-            <button className="btn btn-info">send</button>
+            <button className="btn btn-info" onClick={()=>sendMessage()}>送出</button>
         </div>
     </div>
     )

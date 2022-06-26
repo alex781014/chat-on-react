@@ -1,69 +1,58 @@
-import React,{useState, useEffect} from "react";
+import React,{useState, useEffect, useCallback} from "react";
 import Login from "./Login";
 import Chat from "./Chat";
-
 
 const Main = ({socket})=>{
     const [newUser, setNewUser] = useState("");
     const [user, setUser] = useState({});
-    const [users, setUsers] = useState([]);
-    const [message, setMessage] = useState("");
+    const [users, setUsers] = useState([]);    
     const [messages, setMessages] = useState([]);
 
+    // 檢查客戶端離線
+    const checkIfUserExists = useCallback(()=>{
+      const sessionId = localStorage.getItem("sessionId")
+      if(sessionId){
+        socket.auth = { sessionId:sessionId};
+        socket.connect();
+      }
+    },[socket]);
+    
     useEffect(()=>{
+      checkIfUserExists();
+
+      socket.on("connect",()=>{
+        console.info("connected");
+      })
+      socket.on("disconnect",()=>{
+        console.info("Disconnected");
+      })
+
+
+      socket.on("session",({sessionId,userId,username})=>{
+        socket.auth = {sessionId:sessionId}
+        localStorage.setItem("sessionId",sessionId);
+        setUser({userId,username})
+      })
+
       socket.on("users",(users)=>{
-        const messagesArr = [];
-        for (const {userId,username} of users) {
-          const newMessage = { type:"userStatus", userId, username};
-          messagesArr.push(newMessage)
-        }
-        setMessages([...messages, ...messagesArr])
         setUsers(users);
-      })
-      socket.on("session",({ userId,username})=>{
-        setUser({ userId,username});
-      });
-      socket.on("user connected",({userId,username})=>{
-        const newMessage = { type:"userStatus", userId, username};
-        setMessages([...messages,newMessage])
-      })
-      socket.on("new message",({ userId,username,message })=>{
-      const newMessage = { 
-        type:"message", 
-        userId:userId,
-        username:username,
-        message,
-      }
-      setMessages([...messages,newMessage]);
-      })
-    },[socket,messages]);
+        })
+    },[socket,messages,checkIfUserExists]);
 
-    function logNewUser() {
-    socket.auth = {username:newUser}
-    socket.connect();
+    const authenticateUser = ()=>{
+      socket.auth = {username:newUser};
+      socket.connect();
     }
 
-    function sendMessage(){
-      socket.emit("new message", message)
-      const newMessage = { 
-        type:"message", 
-        userId:user.userId,
-        username:user.username,
-        message,
-      }
-      // 設定對話訊息
-      setMessages([...messages,newMessage]);
-      setMessage("");
-    }
 
     return(
     <main className="content">
       <div className="container mt-3">
         {user.userId && (
-          <Chat user={user} message={message} messages={messages} setMessage={setMessage} sendMessage={sendMessage} />
+          <Chat socket={socket} user={user} users={users} setUsers={setUsers} messages={messages} setMessages={setMessages}/>
         )}
         {!user.userId && (
-          <Login newUser={newUser} setNewUser={setNewUser} logNewUser={logNewUser} />
+          <Login newUser={newUser} setNewUser={setNewUser} authenticateUser={authenticateUser} />
         )}
       </div>
     </main>
