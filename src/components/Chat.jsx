@@ -1,4 +1,4 @@
-import React, {  useState,useEffect, useCallback} from "react";
+import React, {  useState,useEffect, useCallback,useRef} from "react";
 import ChatBody from "./ChatBody";
 import ChatContainer from "./ChatContainer";
 import ChatHeader from "./ChatHeader";
@@ -8,7 +8,7 @@ import ChatInput from "./Chatinput";
 const Chat = ({socket,user,users,setUsers,messages,setMessages})=>{
     const[message,setMessage] = useState("");
     const[selectedUser,setselectedUser] = useState({});
-
+    const currentSelectedUser = useRef({});
     const findUser = useCallback(
         (userId)=>{
             const userIndex = users.findIndex((u)=>u.userId === userId)
@@ -43,8 +43,8 @@ const Chat = ({socket,user,users,setUsers,messages,setMessages})=>{
     );
 
     const userDisconnected = useCallback(
-      ({userId})=>{handleConnectionStatus(userId,false)     
-    },[handleConnectionStatus]
+      ({userId})=>handleConnectionStatus(userId,false)     
+    ,[handleConnectionStatus]
     );
 
     const handleNewMessageStatus = useCallback((userId,status)=>{
@@ -60,8 +60,8 @@ const Chat = ({socket,user,users,setUsers,messages,setMessages})=>{
     const privateMessage = useCallback(
       ({content,from,to})=>{
         //if user is selected
-        if(selectedUser.userId){
-          if(selectedUser.userId === from){
+        if(currentSelectedUser.current.userId){
+          if(currentSelectedUser.current.userId === from){
             const newMessage= {
               userId:from,
               message:content,
@@ -75,8 +75,18 @@ const Chat = ({socket,user,users,setUsers,messages,setMessages})=>{
           handleNewMessageStatus(from,true)
         }
     },
-    [messages,setMessages,selectedUser,handleNewMessageStatus]
+    [messages,setMessages,handleNewMessageStatus]
     );
+
+    const userMessages = useCallback(({ messages })=>{
+      //{content,from} 訊息發送過來
+      //{message,userId} 我們要的資料
+      const chatMessages = [];
+      messages.forEach(({content,from})=>{
+        chatMessages.push({userId:from,message:content});
+        setMessages([...chatMessages]);
+      })
+    },[setMessages])
 
     useEffect(()=>{
         socket.on("user connected",(user)=>userConnected(user));
@@ -84,7 +94,9 @@ const Chat = ({socket,user,users,setUsers,messages,setMessages})=>{
         socket.on("user disconnected",(user)=>userDisconnected(user))
 
         socket.on("private message",(message)=>privateMessage(message));
-    },[socket,userConnected,userDisconnected,privateMessage]);
+
+        socket.on("user messages",(messages)=>userMessages(messages))
+    },[socket,userConnected,userDisconnected,privateMessage,userMessages]);
 
     const sendMessage = () =>{
         socket.emit("private message",{
@@ -102,8 +114,11 @@ const Chat = ({socket,user,users,setUsers,messages,setMessages})=>{
 
     const selectUser = (user)=>{
         setselectedUser(user);
-
-        setMessage([]);
+        setMessages([]);
+        currentSelectedUser.current = user; 
+        socket.emit("user messages",user);
+        // 取消alert點點↓↓
+        handleNewMessageStatus(user.userId,false)
     }
 
     return (
