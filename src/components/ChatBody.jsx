@@ -1,9 +1,13 @@
 import React from "react";
+// import {Waypoint} from "react-waypoint";
 
 const ChatBody = ({user,messages})=>{
         return(
             <div className="position-relative overflow-auto chat-height">
                 {/* <ScrollableFeed> */}
+                {/* <Waypoint>
+  onEnter={user} */}
+
                 <div className="p-4 d-flex flex-column"> 
                     {messages.map((message,index) => { 
                         return message.type === "userStatus" ? (
@@ -49,6 +53,7 @@ const ChatBody = ({user,messages})=>{
                     })}
                 </div>
                 {/* </ScrollableFeed> */}
+                  {/* </Waypoint> */}
             </div>
     )
 }

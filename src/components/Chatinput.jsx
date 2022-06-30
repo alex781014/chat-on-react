@@ -8,7 +8,7 @@ const ChatInput = ({message,setMessage,sendMessage}) =>{
                 className="form-control"
                 name="message" 
                 value={message} 
-                placeholder="Type your message..." 
+                placeholder="請輸入訊息" 
                 onChange={({currentTarget:input})=>setMessage(input.value)} 
                 onKeyPress={(e)=> (e.code === "Enter" ? sendMessage():null)}/>
             <button className="btn btn-info" onClick={()=>sendMessage()}>送出</button>
