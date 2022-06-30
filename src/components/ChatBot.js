@@ -19,6 +19,7 @@ export class ChatBot extends Component {
     }
     // 207d56dbf79d38532a0aa0a007d83e197
     // redeame https://docs.kommunicate.io/docs/web-customization
+    // 設置按鈕用法 https://docs.kommunicate.io/docs/message-types
 
     render() {
         return (
