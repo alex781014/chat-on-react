@@ -1,8 +1,8 @@
 import React, {  useState,useEffect, useCallback,useRef} from "react";
-import ChatBody from "./ChatBody";
-import ChatContainer from "./ChatContainer";
-import ChatHeader from "./ChatHeader";
-import ChatInput from "./Chatinput";
+import ChatBody from "./ChatContainer/ChatBody";
+import ChatContainer from "./ChatContainer/index";
+import ChatHeader from "./ChatContainer/ChatHeader";
+import ChatInput from "./ChatContainer/Chatinput";
 
 
 const Chat = ({socket,user,users,setUsers,messages,setMessages})=>{

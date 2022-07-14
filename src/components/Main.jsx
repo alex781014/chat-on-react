@@ -1,6 +1,6 @@
 import React,{useState, useEffect, useCallback} from "react";
-import Login from "./Login";
-import Chat from "./Chat";
+import Login from "./Chat/Login";
+import Chat from "./Chat/Chat";
 import ChatBot from "./ChatBot";
 
 const Main = ({socket})=>{
