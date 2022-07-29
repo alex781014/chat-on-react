@@ -1,7 +1,8 @@
 import React,{useState, useEffect, useCallback} from "react";
 import Login from "./Chat/Login";
 import Chat from "./Chat/Chat";
-import ChatBot from "./ChatBot";
+import './Main.css'
+// import ChatBot from "./ChatBot";
 
 const Main = ({socket})=>{
     const [newUser, setNewUser] = useState("");
@@ -55,7 +56,7 @@ const Main = ({socket})=>{
         {!user.userId && (
           <Login newUser={newUser} setNewUser={setNewUser} authenticateUser={authenticateUser} />
         )}
-        <ChatBot/>
+        {/* <ChatBot/> */}
 
       </div>
     </main>

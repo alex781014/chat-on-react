@@ -122,50 +122,82 @@ const Chat = ({socket,user,users,setUsers,messages,setMessages})=>{
     }
 
     return (
-        <ChatContainer>
-            <div className="d-flex flex-column col-4 col-lg-4 col-xl-4 pe-0 border-right-info">
-                <div className="align-items-start py-2 px-4 w-100 border-bottom border-info d-lg-block sticky-top bg-white">
-                    <div className="d-flex align-items-center py-1">
-                        <div className="position-relative">
-                        <img src="http://bootdey.com/img/Content/avatar/avatar3.png" className="rounded-circle mx-2" alt={user.username} width="40" height="40" />
-                        </div>
-                        <div className="flex-grow-1">{user.username}</div>
+      <ChatContainer>
+        <div className="d-flex flex-column col-4 col-lg-4 col-xl-4 pe-0 border-right-info">
+          <div className="align-items-start py-2 px-4 w-100 border-bottom border-info d-lg-block sticky-top bg-white">
+            <div className="d-flex align-items-center py-1">
+              <div className="position-relative">
+                <img
+                  src={
+                    user.username === "管理員"
+                      ? "images/Logo.png"
+                      : "http://bootdey.com/img/Content/avatar/avatar1.png"
+                  }
+                  className="rounded-circle mx-2"
+                  alt={user.username}
+                  width="40"
+                  height="40"
+                />
+              </div>
+              <div className="flex-grow-1">{user.username}</div>
+            </div>
+          </div>
+          <div className="text-center bg-primary text-white">已連線用戶</div>
+          {users.length > 0 ? (
+            users.map((user, index) => {
+              return (
+                <div
+                  key={index}
+                  className="py-2 px-2 border-bottom border-info d-lg-black cursor-pointer"
+                  onClick={() => selectUser(user)}
+                >
+                  <div className="d-flex align-items-center py-1">
+                    <div className="d-flex flex-column position-relative">
+                      <img
+                        src={
+                          user.username === "管理員"
+                            ? "images/Logo.png"
+                            : "http://bootdey.com/img/Content/avatar/avatar1.png"
+                        }
+                        className="rounded-circle mx-2"
+                        alt={user.username}
+                        width="45"
+                        height="45"
+                      />
+                      <span
+                        className={user.connected ? "online" : "offline"}
+                      ></span>
                     </div>
+                    <div className="d-flex flex-row position-relative w-100">
+                      <strong className="me-auto">{user.username}</strong>
+                      <span
+                        className={
+                          user.hasNewMessage ? "new-message-alert mt-2" : ""
+                        }
+                      ></span>
+                    </div>
+                  </div>
                 </div>
-                <div className="text-center bg-primary text-white">已連線用戶</div>
-                {users.length > 0 ?
-                    users.map((user,index)=>{
-                        return <div key={index} className="py-2 px-2 border-bottom border-info d-lg-black cursor-pointer" onClick={()=>selectUser(user)}>
-                            <div className="d-flex align-items-center py-1">
-                                <div className="d-flex flex-column position-relative">
-                                <img src={`http://bootdey.com/img/Content/avatar/avatar${index + 1}.png`} className="rounded-circle mx-2" alt={user.username} width="45" height="45" />
-                                <span className={user.connected ? "online":"offline"}></span>
-                            </div>
-                        <div className="d-flex flex-row position-relative w-100">
-                          <strong className="me-auto">{user.username}</strong>
-                          <span className={user.hasNewMessage ? "new-message-alert mt-2" : ""}></span>
-                          </div>
-                    </div>
-                        </div>
-                    })
-                :(
-                    <div className="d-flex justify-content-center align-items-center chat-window">
-                    沒有使用者登入
-                    </div>
-                )}
+              );
+            })
+          ) : (
+            <div className="d-flex justify-content-center align-items-center chat-window">
+              沒有使用者登入
             </div>
-                {selectedUser.userId  && ( <div className="d-flex flex-column col-8 col-lg-8 col-xl-8 ps-0 chat-window">
-                <ChatHeader user={selectedUser}/>
-                <ChatBody user={user} messages={messages}/>
-                <ChatInput 
-                message={message}  
-                setMessage={setMessage}  
-                sendMessage={sendMessage}
-                /> 
-            </div>
-            )}
-
-        </ChatContainer>   
+          )}
+        </div>
+        {selectedUser.userId && (
+          <div className="d-flex flex-column col-8 col-lg-8 col-xl-8 ps-0 chat-window">
+            <ChatHeader user={selectedUser} />
+            <ChatBody user={user} messages={messages} />
+            <ChatInput
+              message={message}
+              setMessage={setMessage}
+              sendMessage={sendMessage}
+            />
+          </div>
+        )}
+      </ChatContainer>
     );
 };
 export default Chat
